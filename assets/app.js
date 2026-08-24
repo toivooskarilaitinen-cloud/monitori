@@ -103,8 +103,9 @@ function render(data){
   Object.entries(data.sensors || {}).forEach(([key,s])=>{
     const row = document.createElement("div");
     row.className = "sensor";
-    const value = s.status === "ok" ? (s.display_value ?? s.value ?? "OK") : "UNAVAILABLE";
-    row.innerHTML = `<div><div class="sensor-name">${sensorLabel(key)}</div><div class="sensor-detail">${sensorRole(key)}</div></div><div class="sensor-detail">${s.detail || s.provider || ""}</div><div class="sensor-value ${s.status === "ok" ? "" : "sensor-unavailable"}">${value}</div>`;
+    const value = s.status === "ok" ? (s.display_value ?? s.value ?? "OK") : "EI SAATAVILLA";
+    const detail = s.detail === "waiting for first run" ? "odottaa ensimmäistä keruuta" : (s.detail || s.provider || "");
+    row.innerHTML = `<div><div class="sensor-name">${sensorLabel(key)}</div><div class="sensor-detail">${sensorRole(key)}</div></div><div class="sensor-detail">${detail}</div><div class="sensor-value ${s.status === "ok" ? "" : "sensor-unavailable"}">${value}</div>`;
     sensorList.appendChild(row);
   });
 
