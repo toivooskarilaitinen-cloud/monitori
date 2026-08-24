@@ -1,15 +1,16 @@
 from __future__ import annotations
-import json, math, os, statistics, zipfile, io
+import json, math, os, statistics, time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from urllib.parse import urlencode
-import requests, feedparser
+import requests, feedparser, websocket
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
 OBS = DATA / "observations"
 HISTORY = DATA / "history"
-METHOD_VERSION = "v0.1"
+METHOD_VERSION = "v0.2"
 UA = "VAIMEA-MONITORI/0.1 (+https://vaimeatapa.fi/lab/)"
 
 for p in (DATA, OBS, HISTORY):
@@ -126,12 +127,79 @@ def activity_cloudflare():
         "detail":"Global HTTP request timeseries, latest hourly point"
     }
 
-def discussion_hn():
-    max_id = get_json("https://hacker-news.firebaseio.com/v0/maxitem.json")
+def discussion_hn_rate(sample_seconds=10):
+    url = "https://hacker-news.firebaseio.com/v0/maxitem.json"
+    start = float(get_json(url))
+    time.sleep(sample_seconds)
+    end = float(get_json(url))
+    return max(0.0, end-start) * 60 / sample_seconds
+
+def discussion_mastodon_rate():
+    instances = ("mastodon.social", "mstdn.social", "fosstodon.org")
+    rates = []
+    for host in instances:
+        try:
+            rows = get_json(f"https://{host}/api/v1/timelines/public", params={"limit":40})
+            stamps = []
+            for row in rows:
+                raw = row.get("created_at")
+                if raw:
+                    stamps.append(datetime.fromisoformat(raw.replace("Z","+00:00")).timestamp())
+            if len(stamps) >= 2:
+                span = max(stamps)-min(stamps)
+                if span > 0:
+                    rates.append((len(stamps)-1)*60/span)
+        except Exception:
+            pass
+    if not rates:
+        raise RuntimeError("Mastodon public timelines unavailable")
+    return statistics.median(rates)
+
+def discussion_bluesky_rate(sample_seconds=10):
+    url = "wss://jetstream2.us-east.bsky.network/subscribe?wantedCollections=app.bsky.feed.post"
+    ws = websocket.create_connection(url,timeout=sample_seconds+5,header=[f"User-Agent: {UA}"])
+    deadline = time.monotonic()+sample_seconds
+    count = 0
+    try:
+        while time.monotonic() < deadline:
+            ws.settimeout(max(0.2,deadline-time.monotonic()))
+            try:
+                event = json.loads(ws.recv())
+            except (TimeoutError, websocket.WebSocketTimeoutException):
+                break
+            commit = event.get("commit",{})
+            if event.get("kind") == "commit" and commit.get("operation") == "create":
+                count += 1
+    finally:
+        ws.close()
+    return count*60/sample_seconds
+
+def discussion_sources():
+    adapters = {
+        "hacker_news":discussion_hn_rate,
+        "mastodon":discussion_mastodon_rate,
+        "bluesky":discussion_bluesky_rate,
+    }
+    components = {}
+    with ThreadPoolExecutor(max_workers=len(adapters)) as pool:
+        futures = {pool.submit(fn):name for name,fn in adapters.items()}
+        for future in as_completed(futures):
+            name = futures[future]
+            try:
+                components[name] = {"status":"ok","items_per_minute":float(future.result())}
+            except Exception as error:
+                components[name] = {"status":"unavailable","detail":str(error)[:120]}
+    rates = [part["items_per_minute"] for part in components.values() if part["status"] == "ok"]
+    if not rates:
+        raise RuntimeError("All conversation sources unavailable")
+    # Log scaling prevents the largest network from overwhelming the shared signal.
+    value = statistics.mean(math.log1p(rate) for rate in rates)
+    available = len(rates)
     return {
-        "status":"ok","provider":"Hacker News official Firebase API",
-        "value":float(max_id),"display_value":str(max_id),
-        "detail":"Max item ID; rate is derived from change between observations"
+        "status":"ok","provider":"Hacker News + Mastodon + Bluesky",
+        "value":value,"display_value":f"{available}/3 lähdettä",
+        "detail":"Julkaisunopeus: Hacker News, Mastodon ja Bluesky",
+        "components":components,
     }
 
 def safe(fn):
@@ -185,7 +253,7 @@ sensors = {
     "wikipedia": safe(knowledge_wikipedia),
     "news": safe(events_gdelt),
     "internet_traffic": safe(activity_cloudflare),
-    "conversation": safe(discussion_hn),
+    "conversation": safe(discussion_sources),
 }
 
 history = read_history()
@@ -194,20 +262,6 @@ zs = {}
 for key in sensor_keys:
     current = sensors[key].get("value")
     past = [raw_value(h,key) for h in history[-90:]]
-    # HN maxitem is cumulative; use rate via difference from previous observation if possible.
-    if key == "conversation" and current is not None and history:
-        prev = raw_value(history[-1], key)
-        if prev is not None:
-            sensors[key]["raw_cumulative"] = current
-            sensors[key]["value"] = max(0.0, current-prev)
-            sensors[key]["display_value"] = f"+{int(sensors[key]['value'])} items"
-            current = sensors[key]["value"]
-            past_rates=[]
-            for i in range(1,len(history)):
-                a=raw_value(history[i],key); b=raw_value(history[i-1],key)
-                if a is not None and b is not None:
-                    past_rates.append(max(0,a-b))
-            past=past_rates[-90:]
     zs[key] = robust_z(current,past)
 
 attention = score_from_z(zs.get("google_trends"))
