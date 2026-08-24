@@ -1,6 +1,6 @@
 {
   "date": "2026-08-24",
-  "generated_at": "2026-08-24T18:55:15.305382+00:00",
+  "generated_at": "2026-08-24T19:12:24.912553+00:00",
   "method_version": "v0.2",
   "baseline": {
     "observations": 1,
@@ -45,7 +45,7 @@
     "google_trends": {
       "status": "ok",
       "provider": "Google Trends Trending Now RSS",
-      "value": 11400.0,
+      "value": 29700.0,
       "display_value": "10 trends",
       "detail": "Trending Now; public RSS fallback"
     },
@@ -59,34 +59,35 @@
     "news": {
       "status": "ok",
       "provider": "GDELT 2.0",
-      "value": 6091171.0,
-      "display_value": "6.1 MB",
+      "value": 5525874.0,
+      "display_value": "5.5 MB",
       "detail": "Latest 15-minute GKG archive size; experimental news-volume proxy"
     },
     "internet_traffic": {
-      "status": "unavailable",
+      "status": "ok",
       "provider": "Cloudflare Radar API",
-      "value": null,
-      "detail": "CLOUDFLARE_API_TOKEN not configured"
+      "value": 0.976272,
+      "display_value": "0.98",
+      "detail": "Global HTTP request timeseries, latest hourly point"
     },
     "conversation": {
       "status": "ok",
       "provider": "Hacker News + Mastodon + Bluesky",
-      "value": 3.3498770196486847,
+      "value": 4.62084242601105,
       "display_value": "3/3 lähdettä",
       "detail": "Julkaisunopeus: Hacker News, Mastodon ja Bluesky",
       "components": {
         "mastodon": {
           "status": "ok",
-          "items_per_minute": 9.421992481203008
-        },
-        "hacker_news": {
-          "status": "ok",
-          "items_per_minute": 0.0
+          "items_per_minute": 8.51047132174637
         },
         "bluesky": {
           "status": "ok",
-          "items_per_minute": 2220.0
+          "items_per_minute": 2562.0
+        },
+        "hacker_news": {
+          "status": "ok",
+          "items_per_minute": 42.0
         }
       }
     }
