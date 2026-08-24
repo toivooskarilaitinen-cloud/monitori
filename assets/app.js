@@ -1,5 +1,16 @@
 const metricOrder = ["activity","volatility","attention","tension","curiosity","strangeness"];
 
+function metricLabel(key){
+  return {
+    activity:"AKTIIVISUUS",
+    volatility:"VAIHTELU",
+    attention:"HUOMIO",
+    tension:"JÄNNITE",
+    curiosity:"UTELIAISUUS",
+    strangeness:"OUTOUS"
+  }[key] || key.toUpperCase();
+}
+
 function fmt(v){
   return (v === null || v === undefined || Number.isNaN(v)) ? "—" : Math.round(v);
 }
@@ -13,18 +24,18 @@ function sensorLabel(key){
   return {
     google_trends:"GOOGLE TRENDS",
     wikipedia:"WIKIPEDIA",
-    news:"NEWS / GDELT",
-    internet_traffic:"INTERNET TRAFFIC",
-    conversation:"CONVERSATION"
+    news:"UUTISET / GDELT",
+    internet_traffic:"INTERNET-LIIKENNE",
+    conversation:"KESKUSTELU"
   }[key] || key.toUpperCase();
 }
 function sensorRole(key){
   return {
-    google_trends:"ATTENTION",
-    wikipedia:"KNOWLEDGE",
-    news:"EVENTS",
-    internet_traffic:"ACTIVITY",
-    conversation:"DISCUSSION"
+    google_trends:"HUOMIO",
+    wikipedia:"TIETO",
+    news:"TAPAHTUMAT",
+    internet_traffic:"AKTIIVISUUS",
+    conversation:"KESKUSTELU"
   }[key] || "";
 }
 function render(data){
@@ -37,11 +48,12 @@ function render(data){
     const m = data.metrics?.[k] || {};
     const row = document.createElement("div");
     row.className = "metric";
-    row.innerHTML = `<span class="metric-name">${k.toUpperCase()}</span><span class="metric-value">${fmt(m.value)}</span><span class="metric-arrow">${arrow(m.change)}</span>`;
+    row.innerHTML = `<span class="metric-name">${metricLabel(k)}</span><span class="metric-value">${fmt(m.value)}</span><span class="metric-arrow">${arrow(m.change)}</span>`;
     metrics.appendChild(row);
   });
 
-  const conditions = data.conditions?.length ? data.conditions : ["COLLECTING BASELINE"];
+  const conditionLabels = {"COLLECTING BASELINE":"KERÄTÄÄN VERTAILUTASOA",ACTIVE:"AKTIIVINEN",QUIET:"HILJAINEN",NORMAL:"NORMAALI",FOCUSED:"KESKITTYNYT",VOLATILE:"VAIHTELEVA",UNUSUAL:"POIKKEAVA","NOT UNUSUAL":"TAVANOMAINEN"};
+  const conditions = (data.conditions?.length ? data.conditions : ["COLLECTING BASELINE"]).map(x=>conditionLabels[x] || x);
   document.getElementById("conditions").innerHTML = conditions.map(x=>`<span class="condition">${x}</span>`).join("");
 
   document.getElementById("change24").textContent = data.summary?.change_24h == null ? "—" : `${data.summary.change_24h > 0 ? "+" : ""}${data.summary.change_24h.toFixed(1)}`;
@@ -58,7 +70,7 @@ function render(data){
     sensorList.appendChild(row);
   });
 
-  document.getElementById("methodVersion").textContent = `METHOD ${data.method_version || "—"} / ${data.baseline?.observations || 0} OBSERVATIONS`;
+  document.getElementById("methodVersion").textContent = `MENETELMÄ ${data.method_version || "—"} / ${data.baseline?.observations || 0} HAVAINTOA`;
 }
 
 async function load(path="data/latest.json"){
