@@ -1,6 +1,6 @@
 const metricOrder = ["activity","volatility","attention","tension","curiosity","strangeness"];
 
-const HELSINKI_WEATHER_URL = "https://api.open-meteo.com/v1/forecast?latitude=60.1699&longitude=24.9384&current=temperature_2m,weather_code,is_day&timezone=Europe%2FHelsinki";
+const KUOPIO_WEATHER_URL = "https://api.open-meteo.com/v1/forecast?latitude=62.8924&longitude=27.6770&current=temperature_2m,weather_code,is_day&timezone=Europe%2FHelsinki";
 
 function updateClock(){
   const now = new Date();
@@ -30,14 +30,14 @@ function weatherLabel(code,isDay){
 async function updateWeather(){
   const target = document.getElementById("weather");
   try{
-    const response = await fetch(HELSINKI_WEATHER_URL);
+    const response = await fetch(KUOPIO_WEATHER_URL);
     if(!response.ok) throw new Error(String(response.status));
     const data = await response.json();
     const current = data.current;
     const temperature = Math.round(current.temperature_2m);
-    target.textContent = `HELSINKI ${temperature} °C · ${weatherLabel(current.weather_code,current.is_day === 1).toUpperCase()}`;
+    target.textContent = `KUOPIO ${temperature} °C · ${weatherLabel(current.weather_code,current.is_day === 1).toUpperCase()}`;
   }catch(error){
-    target.textContent = "HELSINKI — · SÄÄ EI SAATAVILLA";
+    target.textContent = "KUOPIO — · SÄÄ EI SAATAVILLA";
   }
 }
 
