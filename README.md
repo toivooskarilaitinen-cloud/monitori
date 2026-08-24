@@ -30,7 +30,7 @@ Raw observations are preserved. Daily snapshots include a methodology version so
 - KNOWLEDGE: Wikimedia / Wikipedia public API.
 - EVENTS: GDELT 2.0 `lastupdate.txt` metadata, using the current GKG archive size as a lightweight volume proxy.
 - ACTIVITY: Cloudflare Radar API. Requires `CLOUDFLARE_API_TOKEN`.
-- DISCUSSION: Hacker News official Firebase API as the first conversation source. This category is intentionally designed to expand to multiple public discussion sources later.
+- DISCUSSION: a composite posting-rate signal from Hacker News, Mastodon public timelines, and the Bluesky Jetstream. Each source is measured separately before the available rates are combined, so a single network does not define the whole category.
 
 ## GitHub secret
 
