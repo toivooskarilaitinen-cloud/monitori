@@ -1,0 +1,66 @@
+{
+  "date": "—",
+  "generated_at": null,
+  "method_version": "v0.1",
+  "baseline": {
+    "observations": 0,
+    "window_days": 90,
+    "method": "collecting"
+  },
+  "metrics": {
+    "activity": {
+      "value": null,
+      "change": null
+    },
+    "volatility": {
+      "value": null,
+      "change": null
+    },
+    "attention": {
+      "value": null,
+      "change": null
+    },
+    "tension": {
+      "value": null,
+      "change": null
+    },
+    "curiosity": {
+      "value": null,
+      "change": null
+    },
+    "strangeness": {
+      "value": null,
+      "change": null
+    }
+  },
+  "conditions": [
+    "COLLECTING BASELINE"
+  ],
+  "summary": {
+    "change_24h": null,
+    "avg_7d": null,
+    "avg_30d": null
+  },
+  "sensors": {
+    "google_trends": {
+      "status": "unavailable",
+      "detail": "waiting for first run"
+    },
+    "wikipedia": {
+      "status": "unavailable",
+      "detail": "waiting for first run"
+    },
+    "news": {
+      "status": "unavailable",
+      "detail": "waiting for first run"
+    },
+    "internet_traffic": {
+      "status": "unavailable",
+      "detail": "waiting for first run"
+    },
+    "conversation": {
+      "status": "unavailable",
+      "detail": "waiting for first run"
+    }
+  }
+}
