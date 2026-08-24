@@ -1,5 +1,46 @@
 const metricOrder = ["activity","volatility","attention","tension","curiosity","strangeness"];
 
+const HELSINKI_WEATHER_URL = "https://api.open-meteo.com/v1/forecast?latitude=60.1699&longitude=24.9384&current=temperature_2m,weather_code,is_day&timezone=Europe%2FHelsinki";
+
+function updateClock(){
+  const now = new Date();
+  document.getElementById("date").textContent = now.toLocaleDateString("fi-FI",{
+    timeZone:"Europe/Helsinki", day:"2-digit", month:"2-digit", year:"numeric"
+  });
+  document.getElementById("time").textContent = now.toLocaleTimeString("fi-FI",{
+    timeZone:"Europe/Helsinki", hour:"2-digit", minute:"2-digit", second:"2-digit"
+  });
+}
+
+function weatherLabel(code,isDay){
+  if(code === 0) return isDay ? "aurinkoinen" : "selkeä";
+  if(code === 1) return "enimmäkseen selkeä";
+  if(code === 2) return "puolipilvinen";
+  if(code === 3) return "pilvinen";
+  if(code === 45 || code === 48) return "sumuinen";
+  if(code >= 51 && code <= 57) return "tihkusateinen";
+  if(code >= 61 && code <= 67) return "sateinen";
+  if(code >= 71 && code <= 77) return "lumisateinen";
+  if(code >= 80 && code <= 82) return "sadekuuroja";
+  if(code === 85 || code === 86) return "lumikuuroja";
+  if(code >= 95) return "ukkonen";
+  return "säätila tuntematon";
+}
+
+async function updateWeather(){
+  const target = document.getElementById("weather");
+  try{
+    const response = await fetch(HELSINKI_WEATHER_URL);
+    if(!response.ok) throw new Error(String(response.status));
+    const data = await response.json();
+    const current = data.current;
+    const temperature = Math.round(current.temperature_2m);
+    target.textContent = `HELSINKI ${temperature} °C · ${weatherLabel(current.weather_code,current.is_day === 1).toUpperCase()}`;
+  }catch(error){
+    target.textContent = "HELSINKI — · SÄÄ EI SAATAVILLA";
+  }
+}
+
 function metricLabel(key){
   return {
     activity:"AKTIIVISUUS",
@@ -39,9 +80,6 @@ function sensorRole(key){
   }[key] || "";
 }
 function render(data){
-  document.getElementById("date").textContent = (data.date || "—").toUpperCase();
-  document.getElementById("time").textContent = data.generated_at ? new Date(data.generated_at).toLocaleTimeString("fi-FI",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/Helsinki"}) + " EEST" : "—";
-
   const metrics = document.getElementById("metrics");
   metrics.innerHTML = "";
   metricOrder.forEach(k=>{
@@ -93,4 +131,8 @@ document.getElementById("archiveForm").addEventListener("submit",e=>{
 });
 document.getElementById("todayButton").addEventListener("click",()=>load());
 
+updateClock();
+updateWeather();
+setInterval(updateClock,1000);
+setInterval(updateWeather,15*60*1000);
 load();
