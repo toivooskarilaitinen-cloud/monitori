@@ -1,9 +1,9 @@
 {
   "date": "2026-08-25",
-  "generated_at": "2026-08-25T13:07:16.685900+00:00",
+  "generated_at": "2026-08-25T18:53:48.941908+00:00",
   "method_version": "v0.3",
   "baseline": {
-    "observations": 5,
+    "observations": 6,
     "window_days": 90,
     "method": "same weekday + UTC hour, then same hour, robust median/MAD"
   },
@@ -45,29 +45,29 @@
     "google_trends": {
       "status": "ok",
       "provider": "Google Trends Trending Now RSS",
-      "value": 15.412808641975314,
-      "display_value": "15.4 / 100",
+      "value": 2.878945542837321,
+      "display_value": "2.9 / 100",
       "detail": "Huomion keskittyminen 10 trendin liikennearvioista"
     },
     "wikipedia": {
       "status": "ok",
       "provider": "Wikimedia MediaWiki API",
-      "value": 6605.0,
-      "display_value": "6605 edits/h",
+      "value": 5532.0,
+      "display_value": "5532 edits/h",
       "detail": "English Wikipedia recent changes, last hour"
     },
     "news": {
       "status": "ok",
       "provider": "GDELT 2.0",
-      "value": 1152.0,
-      "display_value": "1 152 uutista/15 min",
+      "value": 1598.0,
+      "display_value": "1 598 uutista/15 min",
       "detail": "Viimeisimmän GDELT GKG -erän tietuerivit"
     },
     "internet_traffic": {
       "status": "ok",
       "provider": "Cloudflare Radar API",
-      "value": 108.35015080687181,
-      "display_value": "108.4",
+      "value": 108.24965968827007,
+      "display_value": "108.2",
       "detail": "Radar-suhdeindeksi: sama UTC-tunti edellisinä päivinä = 100"
     },
     "conversation": {
@@ -79,15 +79,15 @@
       "components": {
         "mastodon": {
           "status": "ok",
-          "items_per_minute": 1.3564067796610169
+          "items_per_minute": 1.3062990955313134
+        },
+        "bluesky": {
+          "status": "ok",
+          "items_per_minute": 2592.0
         },
         "hacker_news": {
           "status": "ok",
           "items_per_minute": 0.0
-        },
-        "bluesky": {
-          "status": "ok",
-          "items_per_minute": 3114.0
         }
       }
     }
