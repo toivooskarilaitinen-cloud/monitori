@@ -1,6 +1,6 @@
 {
   "date": "2026-08-25",
-  "generated_at": "2026-08-25T06:17:21.501589+00:00",
+  "generated_at": "2026-08-25T07:04:20.931290+00:00",
   "method_version": "v0.3",
   "baseline": {
     "observations": 4,
@@ -45,29 +45,29 @@
     "google_trends": {
       "status": "ok",
       "provider": "Google Trends Trending Now RSS",
-      "value": 38.87673754287831,
-      "display_value": "38.9 / 100",
+      "value": 38.412246351014595,
+      "display_value": "38.4 / 100",
       "detail": "Huomion keskittyminen 10 trendin liikennearvioista"
     },
     "wikipedia": {
       "status": "ok",
       "provider": "Wikimedia MediaWiki API",
-      "value": 7061.0,
-      "display_value": "7061 edits/h",
+      "value": 5985.0,
+      "display_value": "5985 edits/h",
       "detail": "English Wikipedia recent changes, last hour"
     },
     "news": {
       "status": "ok",
       "provider": "GDELT 2.0",
-      "value": 795.0,
-      "display_value": "795 uutista/15 min",
+      "value": 821.0,
+      "display_value": "821 uutista/15 min",
       "detail": "Viimeisimmän GDELT GKG -erän tietuerivit"
     },
     "internet_traffic": {
       "status": "ok",
       "provider": "Cloudflare Radar API",
-      "value": 105.80876919587658,
-      "display_value": "105.8",
+      "value": 105.86199158891358,
+      "display_value": "105.9",
       "detail": "Radar-suhdeindeksi: sama UTC-tunti edellisinä päivinä = 100"
     },
     "conversation": {
@@ -79,15 +79,15 @@
       "components": {
         "mastodon": {
           "status": "ok",
-          "items_per_minute": 8.246709126815299
+          "items_per_minute": 0.6733146970388685
         },
         "hacker_news": {
           "status": "ok",
-          "items_per_minute": 0.0
+          "items_per_minute": 24.0
         },
         "bluesky": {
           "status": "ok",
-          "items_per_minute": 1392.0
+          "items_per_minute": 1710.0
         }
       }
     }
