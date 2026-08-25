@@ -1,9 +1,9 @@
 {
   "date": "2026-08-25",
-  "generated_at": "2026-08-25T06:15:00.162623+00:00",
+  "generated_at": "2026-08-25T06:17:21.501589+00:00",
   "method_version": "v0.3",
   "baseline": {
-    "observations": 3,
+    "observations": 4,
     "window_days": 90,
     "method": "same weekday + UTC hour, then same hour, robust median/MAD"
   },
@@ -52,15 +52,16 @@
     "wikipedia": {
       "status": "ok",
       "provider": "Wikimedia MediaWiki API",
-      "value": 7034.0,
-      "display_value": "7034 edits/h",
+      "value": 7061.0,
+      "display_value": "7061 edits/h",
       "detail": "English Wikipedia recent changes, last hour"
     },
     "news": {
-      "status": "unavailable",
-      "value": null,
-      "provider": "events_gdelt",
-      "detail": "404 Client Error: Not Found for url: https://data.gdeltproject.org:443/gdeltv2/20260825061500.gkg.csv.zip"
+      "status": "ok",
+      "provider": "GDELT 2.0",
+      "value": 795.0,
+      "display_value": "795 uutista/15 min",
+      "detail": "Viimeisimmän GDELT GKG -erän tietuerivit"
     },
     "internet_traffic": {
       "status": "ok",
@@ -78,15 +79,15 @@
       "components": {
         "mastodon": {
           "status": "ok",
-          "items_per_minute": 48.036585365853654
+          "items_per_minute": 8.246709126815299
         },
         "hacker_news": {
           "status": "ok",
-          "items_per_minute": 18.0
+          "items_per_minute": 0.0
         },
         "bluesky": {
           "status": "ok",
-          "items_per_minute": 2430.0
+          "items_per_minute": 1392.0
         }
       }
     }
