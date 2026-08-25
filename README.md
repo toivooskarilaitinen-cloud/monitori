@@ -26,11 +26,13 @@ Raw observations are preserved. Daily snapshots include a methodology version so
 
 ## Current source adapters
 
-- ATTENTION: Google Trends Trending Now RSS fallback. The official Google Trends API is still limited-access alpha, so the collector is designed to accept an official API adapter later.
-- KNOWLEDGE: Wikimedia / Wikipedia public API.
-- EVENTS: GDELT 2.0 `lastupdate.txt` metadata, using the current GKG archive size as a lightweight volume proxy.
-- ACTIVITY: Cloudflare Radar API. Requires `CLOUDFLARE_API_TOKEN`.
-- DISCUSSION: a composite posting-rate signal from Hacker News, Mastodon public timelines, and the Bluesky Jetstream. Each source is measured separately before the available rates are combined, so a single network does not define the whole category.
+- ATTENTION: normalised concentration (HHI) of traffic estimates in Google Trends Trending Now RSS.
+- KNOWLEDGE: all English Wikipedia edits and new pages in the preceding hour; MediaWiki continuation is followed to completion.
+- EVENTS: record count in the latest 15-minute GDELT 2.0 GKG archive.
+- ACTIVITY: Cloudflare Radar relative HTTP activity, compared with preceding days at the same UTC hour. It is not presented as a raw global request count. Requires `CLOUDFLARE_API_TOKEN`.
+- DISCUSSION: posting-rate signals from Hacker News, Mastodon public timelines, and Bluesky Jetstream. Every network receives its own robust baseline and z-score before the scores are combined.
+
+Method v0.3 uses hourly observations. Baselines prefer the same weekday and UTC hour, then fall back to the same hour. OUTOUS is current absolute deviation; VAIHTELU is the 24-hour change in sensor z-scores.
 
 ## GitHub secret
 

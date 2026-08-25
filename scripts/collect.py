@@ -1,5 +1,5 @@
 from __future__ import annotations
-import json, math, os, statistics, time
+import io, json, math, os, re, statistics, time, zipfile
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
 OBS = DATA / "observations"
 HISTORY = DATA / "history"
-METHOD_VERSION = "v0.2"
+METHOD_VERSION = "v0.3"
 UA = "VAIMEA-MONITORI/0.1 (+https://vaimeatapa.fi/lab/)"
 
 for p in (DATA, OBS, HISTORY):
@@ -40,13 +40,19 @@ def attention_google_trends():
             digits = "".join(ch for ch in str(raw) if ch.isdigit())
             if digits:
                 traffic.append(int(digits))
-    # A stable raw signal: number of current trending entries + their reported traffic if present.
-    value = sum(traffic) if traffic else len(entries)
+    if not traffic:
+        raise RuntimeError("Google Trends RSS did not include traffic estimates")
+    total = sum(traffic)
+    shares = [value / total for value in traffic]
+    # Normalised HHI: 0 = attention spread evenly, 100 = one topic owns it all.
+    raw_hhi = sum(share * share for share in shares)
+    floor = 1 / len(shares)
+    concentration = 100 * (raw_hhi - floor) / (1 - floor) if len(shares) > 1 else 100
     return {
         "status":"ok","provider":"Google Trends Trending Now RSS",
-        "value":float(value),
-        "display_value":f"{len(entries)} trends",
-        "detail":"Trending Now; public RSS fallback"
+        "value":float(concentration),
+        "display_value":f"{concentration:.1f} / 100",
+        "detail":f"Huomion keskittyminen {len(traffic)} trendin liikennearvioista"
     }
 
 def knowledge_wikipedia():
@@ -60,13 +66,11 @@ def knowledge_wikipedia():
         "rcstart":start,"rcend":end,"rcdir":"older"
     }
     count = 0
-    loops = 0
     while True:
         data = get_json(url, params=params)
         count += len(data.get("query",{}).get("recentchanges",[]))
-        loops += 1
         cont = data.get("continue")
-        if not cont or loops >= 12:
+        if not cont:
             break
         params.update(cont)
     return {
@@ -76,7 +80,6 @@ def knowledge_wikipedia():
     }
 
 def events_gdelt():
-    # Lightweight proxy: metadata size of latest GKG update, avoiding downloading a large archive.
     url = "https://data.gdeltproject.org/gdeltv2/lastupdate.txt"
     r = requests.get(url, headers={"User-Agent":UA}, timeout=25)
     r.raise_for_status()
@@ -88,12 +91,31 @@ def events_gdelt():
             break
     if not gkg:
         raise RuntimeError("GDELT GKG metadata not found")
-    size_bytes = int(gkg[0])
+    archive_url = gkg[2]
+    archive = None
+    # lastupdate.txt may briefly lead the archive CDN. Walk back through a few
+    # 15-minute slots instead of turning a publication race into missing data.
+    for _ in range(5):
+        candidate = requests.get(archive_url, headers={"User-Agent":UA}, timeout=60)
+        if candidate.ok:
+            archive = candidate
+            break
+        match = re.search(r"(\d{14})(\.gkg\.csv\.zip)$", archive_url)
+        if not match:
+            candidate.raise_for_status()
+        stamp = datetime.strptime(match.group(1), "%Y%m%d%H%M%S") - timedelta(minutes=15)
+        archive_url = archive_url[:match.start(1)] + stamp.strftime("%Y%m%d%H%M%S") + match.group(2)
+    if archive is None:
+        raise RuntimeError("GDELT GKG archive unavailable after five 15-minute slots")
+    with zipfile.ZipFile(io.BytesIO(archive.content)) as bundle:
+        csv_name = next(name for name in bundle.namelist() if name.lower().endswith(".csv"))
+        with bundle.open(csv_name) as rows:
+            record_count = sum(1 for line in rows if line.strip())
     return {
         "status":"ok","provider":"GDELT 2.0",
-        "value":float(size_bytes),
-        "display_value":f"{size_bytes/1_000_000:.1f} MB",
-        "detail":"Latest 15-minute GKG archive size; experimental news-volume proxy"
+        "value":float(record_count),
+        "display_value":f"{record_count:,} uutista/15 min".replace(","," "),
+        "detail":"Viimeisimmän GDELT GKG -erän tietuerivit"
     }
 
 def activity_cloudflare():
@@ -104,7 +126,7 @@ def activity_cloudflare():
             "value":None,"detail":"CLOUDFLARE_API_TOKEN not configured"
         }
     url = "https://api.cloudflare.com/client/v4/radar/http/timeseries"
-    params = {"dateRange":"1d","aggInterval":"1h","format":"JSON"}
+    params = {"dateRange":"28d","aggInterval":"1h","format":"JSON"}
     data = get_json(url, params=params, headers={"Authorization":f"Bearer {token}"})
     result = data.get("result",{})
     series = result.get("serie_0") or result.get("series") or {}
@@ -120,11 +142,21 @@ def activity_cloudflare():
             "status":"unavailable","provider":"Cloudflare Radar API",
             "value":None,"detail":"Radar response received; timeseries shape needs calibration"
         }
+    # Radar returns a relative series, not raw global request counts. Compare the
+    # latest complete hour with the same UTC hour on preceding days.
     value = nums[-1]
+    comparable = nums[-25::-24]
+    if len(comparable) < 7:
+        return {"status":"unavailable","provider":"Cloudflare Radar API","value":None,
+                "detail":"Same-hour comparison needs at least seven days"}
+    baseline = statistics.median(comparable[:27])
+    relative_index = value / baseline * 100 if baseline else None
+    if relative_index is None:
+        raise RuntimeError("Cloudflare same-hour baseline was zero")
     return {
         "status":"ok","provider":"Cloudflare Radar API",
-        "value":value,"display_value":f"{value:.2f}",
-        "detail":"Global HTTP request timeseries, latest hourly point"
+        "value":relative_index,"display_value":f"{relative_index:.1f}",
+        "detail":"Radar-suhdeindeksi: sama UTC-tunti edellisinä päivinä = 100"
     }
 
 def discussion_hn_rate(sample_seconds=10):
@@ -192,13 +224,11 @@ def discussion_sources():
     rates = [part["items_per_minute"] for part in components.values() if part["status"] == "ok"]
     if not rates:
         raise RuntimeError("All conversation sources unavailable")
-    # Log scaling prevents the largest network from overwhelming the shared signal.
-    value = statistics.mean(math.log1p(rate) for rate in rates)
     available = len(rates)
     return {
         "status":"ok","provider":"Hacker News + Mastodon + Bluesky",
-        "value":value,"display_value":f"{available}/3 lähdettä",
-        "detail":"Julkaisunopeus: Hacker News, Mastodon ja Bluesky",
+        "value":None,"display_value":f"{available}/3 lähdettä",
+        "detail":"Jokainen lähde normalisoidaan omaan historiaansa",
         "components":components,
     }
 
@@ -216,6 +246,34 @@ def read_history():
         except Exception:
             pass
     return rows
+
+def read_observations():
+    rows = []
+    for p in sorted(OBS.glob("*.json")):
+        try:
+            rows.append(json.loads(p.read_text(encoding="utf-8")))
+        except Exception:
+            pass
+    return rows
+
+def parsed_time(snapshot):
+    try: return datetime.fromisoformat(snapshot.get("generated_at","").replace("Z","+00:00"))
+    except (TypeError, ValueError): return None
+
+def baseline_rows(rows, current_time, minimum=7):
+    timed = [(parsed_time(row), row) for row in rows]
+    timed = [(stamp,row) for stamp,row in timed if stamp and stamp < current_time]
+    same_slot = [row for stamp,row in timed if stamp.weekday() == current_time.weekday() and stamp.hour == current_time.hour]
+    if len(same_slot) >= minimum: return same_slot[-13:]
+    same_hour = [row for stamp,row in timed if stamp.hour == current_time.hour]
+    if len(same_hour) >= minimum: return same_hour[-30:]
+    return [row for _,row in timed[-90:]]
+
+def closest_snapshot(rows, target, tolerance_hours=3):
+    candidates = [(abs((stamp-target).total_seconds()), row) for row in rows if (stamp:=parsed_time(row))]
+    if not candidates: return None
+    distance,row = min(candidates,key=lambda item:item[0])
+    return row if distance <= tolerance_hours*3600 else None
 
 def raw_value(snapshot, sensor):
     s = snapshot.get("sensors",{}).get(sensor,{})
@@ -257,12 +315,31 @@ sensors = {
 }
 
 history = read_history()
+observations = read_observations()
+baseline = baseline_rows(observations or history, now)
 sensor_keys = list(sensors)
 zs = {}
 for key in sensor_keys:
     current = sensors[key].get("value")
-    past = [raw_value(h,key) for h in history[-90:]]
+    past = [raw_value(h,key) for h in baseline]
     zs[key] = robust_z(current,past)
+
+# Conversation networks are incomparable in raw volume. Give each its own
+# robust z-score and combine only the normalised source signals.
+conversation = sensors.get("conversation",{})
+component_z = {}
+for source,part in conversation.get("components",{}).items():
+    current = part.get("items_per_minute")
+    past = []
+    for row in baseline:
+        value = row.get("sensors",{}).get("conversation",{}).get("components",{}).get(source,{}).get("items_per_minute")
+        if isinstance(value,(int,float)): past.append(value)
+    component_z[source] = robust_z(current,past)
+usable_component_z = [z for z in component_z.values() if z is not None]
+if usable_component_z:
+    conversation["value"] = statistics.mean(usable_component_z)
+    conversation["component_z"] = component_z
+    zs["conversation"] = conversation["value"]
 
 attention = score_from_z(zs.get("google_trends"))
 knowledge = score_from_z(zs.get("wikipedia"))
@@ -271,7 +348,12 @@ activity_sensor = score_from_z(zs.get("internet_traffic"))
 discussion = score_from_z(zs.get("conversation"))
 
 activity = mean_available([activity_sensor, knowledge, discussion, events])
-volatility = mean_available([score_from_z(z,absolute=True) for z in zs.values()])
+previous_24h = closest_snapshot(observations, now-timedelta(hours=24))
+previous_z = previous_24h.get("sensor_z",{}) if previous_24h else {}
+volatility = mean_available([
+    score_from_z(z-previous_z[key],absolute=True)
+    for key,z in zs.items() if z is not None and isinstance(previous_z.get(key),(int,float))
+])
 tension = mean_available([events, discussion, attention])
 curiosity = mean_available([knowledge, attention])
 strangeness_parts = [score_from_z(z,absolute=True) for z in zs.values()]
@@ -280,7 +362,7 @@ strangeness = mean_available(strangeness_parts)
 def metric(value, prev=None):
     return {"value": value, "change": None if value is None or prev is None else value-prev}
 
-prev = history[-1] if history else None
+prev = previous_24h
 prev_metrics = prev.get("metrics",{}) if prev else {}
 metrics_values = {
     "activity":activity,
@@ -317,7 +399,7 @@ snapshot={
     "date":date,
     "generated_at":now.isoformat(),
     "method_version":METHOD_VERSION,
-    "baseline":{"observations":len(history),"window_days":90,"method":"rolling robust median/MAD; provisional under 30 days"},
+    "baseline":{"observations":len(baseline),"window_days":90,"method":"same weekday + UTC hour, then same hour, robust median/MAD"},
     "metrics":metrics,
     "conditions":conditions,
     "summary":summary,
