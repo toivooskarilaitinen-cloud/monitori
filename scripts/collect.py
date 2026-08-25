@@ -1,5 +1,5 @@
 from __future__ import annotations
-import io, json, math, os, statistics, time, zipfile
+import io, json, math, os, re, statistics, time, zipfile
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
@@ -91,8 +91,22 @@ def events_gdelt():
             break
     if not gkg:
         raise RuntimeError("GDELT GKG metadata not found")
-    archive = requests.get(gkg[2], headers={"User-Agent":UA}, timeout=60)
-    archive.raise_for_status()
+    archive_url = gkg[2]
+    archive = None
+    # lastupdate.txt may briefly lead the archive CDN. Walk back through a few
+    # 15-minute slots instead of turning a publication race into missing data.
+    for _ in range(5):
+        candidate = requests.get(archive_url, headers={"User-Agent":UA}, timeout=60)
+        if candidate.ok:
+            archive = candidate
+            break
+        match = re.search(r"(\d{14})(\.gkg\.csv\.zip)$", archive_url)
+        if not match:
+            candidate.raise_for_status()
+        stamp = datetime.strptime(match.group(1), "%Y%m%d%H%M%S") - timedelta(minutes=15)
+        archive_url = archive_url[:match.start(1)] + stamp.strftime("%Y%m%d%H%M%S") + match.group(2)
+    if archive is None:
+        raise RuntimeError("GDELT GKG archive unavailable after five 15-minute slots")
     with zipfile.ZipFile(io.BytesIO(archive.content)) as bundle:
         csv_name = next(name for name in bundle.namelist() if name.lower().endswith(".csv"))
         with bundle.open(csv_name) as rows:
