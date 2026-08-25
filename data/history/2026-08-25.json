@@ -1,11 +1,11 @@
 {
   "date": "2026-08-25",
-  "generated_at": "2026-08-25T01:48:17.458254+00:00",
-  "method_version": "v0.2",
+  "generated_at": "2026-08-25T06:15:00.162623+00:00",
+  "method_version": "v0.3",
   "baseline": {
-    "observations": 1,
+    "observations": 3,
     "window_days": 90,
-    "method": "rolling robust median/MAD; provisional under 30 days"
+    "method": "same weekday + UTC hour, then same hour, robust median/MAD"
   },
   "metrics": {
     "activity": {
@@ -45,49 +45,48 @@
     "google_trends": {
       "status": "ok",
       "provider": "Google Trends Trending Now RSS",
-      "value": 7800.0,
-      "display_value": "10 trends",
-      "detail": "Trending Now; public RSS fallback"
+      "value": 38.87673754287831,
+      "display_value": "38.9 / 100",
+      "detail": "Huomion keskittyminen 10 trendin liikennearvioista"
     },
     "wikipedia": {
       "status": "ok",
       "provider": "Wikimedia MediaWiki API",
-      "value": 6000.0,
-      "display_value": "6000 edits/h",
+      "value": 7034.0,
+      "display_value": "7034 edits/h",
       "detail": "English Wikipedia recent changes, last hour"
     },
     "news": {
-      "status": "ok",
-      "provider": "GDELT 2.0",
-      "value": 5025605.0,
-      "display_value": "5.0 MB",
-      "detail": "Latest 15-minute GKG archive size; experimental news-volume proxy"
+      "status": "unavailable",
+      "value": null,
+      "provider": "events_gdelt",
+      "detail": "404 Client Error: Not Found for url: https://data.gdeltproject.org:443/gdeltv2/20260825061500.gkg.csv.zip"
     },
     "internet_traffic": {
       "status": "ok",
       "provider": "Cloudflare Radar API",
-      "value": 0.762062,
-      "display_value": "0.76",
-      "detail": "Global HTTP request timeseries, latest hourly point"
+      "value": 105.80876919587658,
+      "display_value": "105.8",
+      "detail": "Radar-suhdeindeksi: sama UTC-tunti edellisinä päivinä = 100"
     },
     "conversation": {
       "status": "ok",
       "provider": "Hacker News + Mastodon + Bluesky",
-      "value": 2.798455674234289,
+      "value": null,
       "display_value": "3/3 lähdettä",
-      "detail": "Julkaisunopeus: Hacker News, Mastodon ja Bluesky",
+      "detail": "Jokainen lähde normalisoidaan omaan historiaansa",
       "components": {
         "mastodon": {
           "status": "ok",
-          "items_per_minute": 1.201149299742816
+          "items_per_minute": 48.036585365853654
         },
         "hacker_news": {
           "status": "ok",
-          "items_per_minute": 0.0
+          "items_per_minute": 18.0
         },
         "bluesky": {
           "status": "ok",
-          "items_per_minute": 2010.0
+          "items_per_minute": 2430.0
         }
       }
     }
