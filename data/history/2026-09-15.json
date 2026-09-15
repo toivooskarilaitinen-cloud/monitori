@@ -1,6 +1,6 @@
 {
   "date": "2026-09-15",
-  "generated_at": "2026-09-15T11:37:28.547916+00:00",
+  "generated_at": "2026-09-15T16:51:46.559707+00:00",
   "method_version": "v0.3",
   "baseline": {
     "observations": 11,
@@ -9,28 +9,28 @@
   },
   "metrics": {
     "activity": {
-      "value": 43.546469093039626,
-      "change": -6.545901998638662
+      "value": 42.622948517084716,
+      "change": null
     },
     "volatility": {
-      "value": 27.88669902671733,
-      "change": -32.438943986093896
+      "value": null,
+      "change": null
     },
     "attention": {
-      "value": 54.58024936078814,
-      "change": 23.833188789728933
+      "value": 38.09938632870369,
+      "change": null
     },
     "tension": {
-      "value": 54.25672342549624,
-      "change": 11.247038838959284
+      "value": 36.57535801544818,
+      "change": null
     },
     "curiosity": {
-      "value": 35.162642537536925,
-      "change": -4.739494305369725
+      "value": 40.79342981483728,
+      "change": null
     },
     "strangeness": {
-      "value": 21.82984757634913,
-      "change": 10.128856305342447
+      "value": 21.388901414195413,
+      "change": null
     }
   },
   "conditions": [
@@ -38,53 +38,53 @@
     "NOT UNUSUAL"
   ],
   "summary": {
-    "change_24h": 10.128856305342447,
-    "avg_7d": 31.198238130058883,
-    "avg_30d": 31.75880296599177
+    "change_24h": null,
+    "avg_7d": 31.026370361154342,
+    "avg_30d": 31.701513709690257
   },
   "sensors": {
     "google_trends": {
       "status": "ok",
       "provider": "Google Trends Trending Now RSS",
-      "value": 36.11411573823688,
-      "display_value": "36.1 / 100",
+      "value": 15.82987072945522,
+      "display_value": "15.8 / 100",
       "detail": "Huomion keskittyminen 10 trendin liikennearvioista"
     },
     "wikipedia": {
       "status": "ok",
       "provider": "Wikimedia MediaWiki API",
-      "value": 5123.0,
-      "display_value": "5123 edits/h",
+      "value": 7614.0,
+      "display_value": "7614 edits/h",
       "detail": "English Wikipedia recent changes, last hour"
     },
     "news": {
       "status": "ok",
       "provider": "GDELT 2.0",
-      "value": 1252.0,
-      "display_value": "1 252 uutista/15 min",
+      "value": 1555.0,
+      "display_value": "1 555 uutista/15 min",
       "detail": "Viimeisimmän GDELT GKG -erän tietuerivit"
     },
     "internet_traffic": {
       "status": "ok",
       "provider": "Cloudflare Radar API",
-      "value": 104.51839704390747,
-      "display_value": "104.5",
+      "value": 105.72992770187544,
+      "display_value": "105.7",
       "detail": "Radar-suhdeindeksi: sama UTC-tunti edellisinä päivinä = 100"
     },
     "conversation": {
       "status": "ok",
       "provider": "Hacker News + Mastodon + Bluesky",
-      "value": -0.27102869912774463,
+      "value": -1.6056212137542525,
       "display_value": "3/3 lähdettä",
       "detail": "Jokainen lähde normalisoidaan omaan historiaansa",
       "components": {
         "mastodon": {
           "status": "ok",
-          "items_per_minute": 1.1190583450778444
+          "items_per_minute": 1.202284310099218
         },
         "bluesky": {
           "status": "ok",
-          "items_per_minute": 2400.0
+          "items_per_minute": 2082.0
         },
         "hacker_news": {
           "status": "ok",
@@ -92,17 +92,17 @@
         }
       },
       "component_z": {
-        "mastodon": -1.6477345705586814,
-        "bluesky": 1.6188,
-        "hacker_news": -0.7841515268245525
+        "mastodon": -0.6878124236828806,
+        "bluesky": -3.6722777777777775,
+        "hacker_news": -0.4567734398020992
       }
     }
   },
   "sensor_z": {
-    "google_trends": 0.25445829782156326,
-    "wikipedia": -1.9030535714285715,
-    "news": 0.7260243055555555,
-    "internet_traffic": 0.013939985676232513,
-    "conversation": -0.27102869912774463
+    "google_trends": -0.6611452039609063,
+    "wikipedia": -0.3618070388349514,
+    "news": 0.029326086956521738,
+    "internet_traffic": 0.29875739165150794,
+    "conversation": -1.6056212137542525
   }
 }
