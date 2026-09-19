@@ -1,110 +1,108 @@
 {
   "date": "2026-09-19",
-  "generated_at": "2026-09-19T04:30:55.378700+00:00",
+  "generated_at": "2026-09-19T10:51:51.337527+00:00",
   "method_version": "v0.3",
   "baseline": {
-    "observations": 18,
+    "observations": 90,
     "window_days": 90,
     "method": "same weekday + UTC hour, then same hour, robust median/MAD"
   },
   "metrics": {
     "activity": {
-      "value": 51.310976959915294,
-      "change": 3.481135123546551
+      "value": 28.3978771830958,
+      "change": -2.0266482037820737
     },
     "volatility": {
-      "value": 67.80719327541465,
-      "change": 38.27839684270515
+      "value": 23.210938238761177,
+      "change": -18.193495674877614
     },
     "attention": {
-      "value": 93.6462579937077,
-      "change": 42.18511632784914
+      "value": 39.03036111508932,
+      "change": 0.6368267690286942
     },
     "tension": {
-      "value": 77.38254631536289,
-      "change": 13.151187119979255
+      "value": 41.337405234937115,
+      "change": 0.5954312727050706
     },
     "curiosity": {
-      "value": 80.19439244049397,
-      "change": 49.72385929035434
+      "value": 29.219012866587683,
+      "change": 10.02224569355737
     },
     "strangeness": {
-      "value": 59.930079244812774,
-      "change": 28.076979160435226
+      "value": 35.3339456051733,
+      "change": 1.3228830084825063
     }
   },
   "conditions": [
-    "NORMAL",
-    "FOCUSED",
-    "VOLATILE",
+    "QUIET",
     "NOT UNUSUAL"
   ],
   "summary": {
-    "change_24h": 28.076979160435226,
-    "avg_7d": 25.043541665796777,
-    "avg_30d": 31.007310565010343
+    "change_24h": 1.3228830084825063,
+    "avg_7d": 29.975962467244756,
+    "avg_30d": 32.16422131220244
   },
   "sensors": {
     "google_trends": {
       "status": "ok",
       "provider": "Google Trends Trending Now RSS",
-      "value": 35.26041666666667,
-      "display_value": "35.3 / 100",
+      "value": 8.163265306122447,
+      "display_value": "8.2 / 100",
       "detail": "Huomion keskittyminen 10 trendin liikennearvioista"
     },
     "wikipedia": {
       "status": "ok",
       "provider": "Wikimedia MediaWiki API",
-      "value": 8954.0,
-      "display_value": "8954 edits/h",
+      "value": 4525.0,
+      "display_value": "4525 edits/h",
       "detail": "English Wikipedia recent changes, last hour"
     },
     "news": {
       "status": "ok",
       "provider": "GDELT 2.0",
-      "value": 602.0,
-      "display_value": "602 uutista/15 min",
+      "value": 698.0,
+      "display_value": "698 uutista/15 min",
       "detail": "Viimeisimmän GDELT GKG -erän tietuerivit"
     },
     "internet_traffic": {
       "status": "ok",
       "provider": "Cloudflare Radar API",
-      "value": 96.86061227685336,
-      "display_value": "96.9",
+      "value": 94.80248370270314,
+      "display_value": "94.8",
       "detail": "Radar-suhdeindeksi: sama UTC-tunti edellisinä päivinä = 100"
     },
     "conversation": {
       "status": "ok",
       "provider": "Hacker News + Mastodon + Bluesky",
-      "value": 10.242428827555146,
+      "value": -0.31018797656760516,
       "display_value": "3/3 lähdettä",
       "detail": "Jokainen lähde normalisoidaan omaan historiaansa",
       "components": {
         "mastodon": {
           "status": "ok",
-          "items_per_minute": 32.08372147182115
+          "items_per_minute": 0.02903928375245384
+        },
+        "bluesky": {
+          "status": "ok",
+          "items_per_minute": 2532.0
         },
         "hacker_news": {
           "status": "ok",
           "items_per_minute": 0.0
-        },
-        "bluesky": {
-          "status": "ok",
-          "items_per_minute": 2208.0
         }
       },
       "component_z": {
-        "mastodon": 27.81053321361178,
-        "hacker_news": -0.7367883976130073,
-        "bluesky": 3.6535416666666665
+        "mastodon": -0.7369542018622747,
+        "bluesky": 0.36114960629921256,
+        "hacker_news": -0.5547593341397533
       }
     }
   },
   "sensor_z": {
-    "google_trends": 2.4247921107615396,
-    "wikipedia": 0.9301403826266804,
-    "news": -0.6388121693121693,
-    "internet_traffic": -2.975111735005496,
-    "conversation": 10.242428827555146
+    "google_trends": -0.6094243824950376,
+    "wikipedia": -1.6995741878841089,
+    "news": -0.5241534351145037,
+    "internet_traffic": -2.266556137523604,
+    "conversation": -0.31018797656760516
   }
 }
