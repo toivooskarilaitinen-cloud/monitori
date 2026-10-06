@@ -1,6 +1,6 @@
 {
   "date": "2026-10-06",
-  "generated_at": "2026-10-06T06:11:39.330459+00:00",
+  "generated_at": "2026-10-06T18:18:09.552952+00:00",
   "method_version": "v0.3",
   "baseline": {
     "observations": 90,
@@ -9,83 +9,82 @@
   },
   "metrics": {
     "activity": {
-      "value": 59.94597901093885,
-      "change": 16.437523918616087
+      "value": 64.2625735533573,
+      "change": null
     },
     "volatility": {
-      "value": 37.8129807449986,
-      "change": 4.714338712149086
+      "value": null,
+      "change": null
     },
     "attention": {
-      "value": 100,
-      "change": 52.10182300129218
+      "value": 47.79844874687831,
+      "change": null
     },
     "tension": {
-      "value": 82.6036572064552,
-      "change": 35.30229435823481
+      "value": 58.03450135231784,
+      "change": null
     },
     "curiosity": {
-      "value": 68.95121359223302,
-      "change": 30.084699526536063
+      "value": 58.67428591190069,
+      "change": null
     },
     "strangeness": {
-      "value": 39.83674095357698,
-      "change": 27.821499089917005
+      "value": 24.897778994745373,
+      "change": null
     }
   },
   "conditions": [
-    "NORMAL",
-    "FOCUSED",
+    "ACTIVE",
     "NOT UNUSUAL"
   ],
   "summary": {
-    "change_24h": 27.821499089917005,
-    "avg_7d": 34.22120464364224,
-    "avg_30d": 31.13005262059662
+    "change_24h": null,
+    "avg_7d": 34.7461326540597,
+    "avg_30d": 30.82944584953071
   },
   "sensors": {
     "google_trends": {
       "status": "ok",
       "provider": "Google Trends Trending Now RSS",
-      "value": 54.334070657857325,
-      "display_value": "54.3 / 100",
+      "value": 12.30001144678565,
+      "display_value": "12.3 / 100",
       "detail": "Huomion keskittyminen 10 trendin liikennearvioista"
     },
     "wikipedia": {
       "status": "ok",
       "provider": "Wikimedia MediaWiki API",
-      "value": 6395.0,
-      "display_value": "6395 edits/h",
+      "value": 8940.0,
+      "display_value": "8940 edits/h",
       "detail": "English Wikipedia recent changes, last hour"
     },
     "news": {
       "status": "ok",
       "provider": "GDELT 2.0",
-      "value": 780.0,
-      "display_value": "780 uutista/15 min",
+      "value": 1520.0,
+      "display_value": "1 520 uutista/15 min",
       "detail": "Viimeisimmän GDELT GKG -erän tietuerivit"
     },
     "internet_traffic": {
       "status": "ok",
       "provider": "Cloudflare Radar API",
-      "value": 102.69963988012793,
-      "display_value": "102.7",
+      "value": 104.13853460696943,
+      "display_value": "104.1",
       "detail": "Radar-suhdeindeksi: sama UTC-tunti edellisinä päivinä = 100"
     },
     "conversation": {
       "status": "ok",
       "provider": "Hacker News + Mastodon + Bluesky",
-      "value": 3.564220041867906,
+      "value": -0.10344803832915427,
       "display_value": "3/3 lähdettä",
       "detail": "Jokainen lähde normalisoidaan omaan historiaansa",
       "components": {
         "mastodon": {
           "status": "ok",
-          "items_per_minute": 40.3448275862069
+          "items_per_minute": 2.513426423200859
         },
         "bluesky": {
           "status": "ok",
-          "items_per_minute": 1608.0
+          "items_per_minute": 2502.0
         },
         "hacker_news": {
           "status": "ok",
@@ -93,17 +92,17 @@
         }
       },
       "component_z": {
-        "mastodon": 12.78268931896644,
-        "bluesky": -1.599030172413793,
-        "hacker_news": -0.4909990209489284
+        "mastodon": 0.032192964651719,
+        "bluesky": 0.1325940170940171,
+        "hacker_news": -0.4751310967331989
       }
     }
   },
   "sensor_z": {
-    "google_trends": 3.281761606422655,
-    "wikipedia": -0.6720873786407767,
-    "news": -0.1216126878130217,
-    "internet_traffic": 0.22613984666243134,
-    "conversation": 3.564220041867906
+    "google_trends": -0.12230840295120521,
+    "wikipedia": 1.0861179487179486,
+    "news": 1.56484,
+    "internet_traffic": 0.6219508792461617,
+    "conversation": -0.10344803832915427
   }
 }
