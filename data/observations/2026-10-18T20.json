@@ -1,0 +1,109 @@
+{
+  "date": "2026-10-18",
+  "generated_at": "2026-10-18T20:34:06.164005+00:00",
+  "method_version": "v0.3",
+  "baseline": {
+    "observations": 18,
+    "window_days": 90,
+    "method": "same weekday + UTC hour, then same hour, robust median/MAD"
+  },
+  "metrics": {
+    "activity": {
+      "value": 49.8758751107634,
+      "change": 2.927047877860957
+    },
+    "volatility": {
+      "value": 23.68939934134959,
+      "change": -12.010839250254474
+    },
+    "attention": {
+      "value": 100,
+      "change": 69.77068617005585
+    },
+    "tension": {
+      "value": 71.0348549769907,
+      "change": 26.206213390906036
+    },
+    "curiosity": {
+      "value": 72.30895360824742,
+      "change": 35.45120992537947
+    },
+    "strangeness": {
+      "value": 33.85600984657409,
+      "change": 3.2717331333844726
+    }
+  },
+  "conditions": [
+    "NORMAL",
+    "FOCUSED",
+    "NOT UNUSUAL"
+  ],
+  "summary": {
+    "change_24h": 3.2717331333844726,
+    "avg_7d": 33.51010078336835,
+    "avg_30d": 33.202694964855
+  },
+  "sensors": {
+    "google_trends": {
+      "status": "ok",
+      "provider": "Google Trends Trending Now RSS",
+      "value": 74.01054656299411,
+      "display_value": "74.0 / 100",
+      "detail": "Huomion keskittyminen 10 trendin liikennearvioista"
+    },
+    "wikipedia": {
+      "status": "ok",
+      "provider": "Wikimedia MediaWiki API",
+      "value": 7698.0,
+      "display_value": "7698 edits/h",
+      "detail": "English Wikipedia recent changes, last hour"
+    },
+    "news": {
+      "status": "ok",
+      "provider": "GDELT 2.0",
+      "value": 702.0,
+      "display_value": "702 uutista/15 min",
+      "detail": "Viimeisimmän GDELT GKG -erän tietuerivit"
+    },
+    "internet_traffic": {
+      "status": "ok",
+      "provider": "Cloudflare Radar API",
+      "value": 97.59543212524126,
+      "display_value": "97.6",
+      "detail": "Radar-suhdeindeksi: sama UTC-tunti edellisinä päivinä = 100"
+    },
+    "conversation": {
+      "status": "ok",
+      "provider": "Hacker News + Mastodon + Bluesky",
+      "value": 1.1378541698641338,
+      "display_value": "3/3 lähdettä",
+      "detail": "Jokainen lähde normalisoidaan omaan historiaansa",
+      "components": {
+        "mastodon": {
+          "status": "ok",
+          "items_per_minute": 8.23943661971831
+        },
+        "hacker_news": {
+          "status": "ok",
+          "items_per_minute": 0.0
+        },
+        "bluesky": {
+          "status": "ok",
+          "items_per_minute": 2562.0
+        }
+      },
+      "component_z": {
+        "mastodon": 3.806807659024563,
+        "hacker_news": -0.5973701494321616,
+        "bluesky": 0.204125
+      }
+    }
+  },
+  "sensor_z": {
+    "google_trends": 3.591003257385283,
+    "wikipedia": -0.29900515463917526,
+    "news": -0.4098227848101266,
+    "internet_traffic": -0.4566095391340747,
+    "conversation": 1.1378541698641338
+  }
+}
