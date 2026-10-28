@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-28",
+  "generated_at": "2026-10-28T05:29:13.286828+00:00",
+  "method_version": "v0.3",
+  "baseline": {
+    "observations": 17,
+    "window_days": 90,
+    "method": "same weekday + UTC hour, then same hour, robust median/MAD"
+  },
+  "metrics": {
+    "activity": {
+      "value": 55.628250516843075,
+      "change": 8.58529071964017
+    },
+    "volatility": {
+      "value": 23.2635745722937,
+      "change": -23.731002731977362
+    },
+    "attention": {
+      "value": 100,
+      "change": 69.07596064342182
+    },
+    "tension": {
+      "value": 68.40975141016266,
+      "change": 23.069478927040272
+    },
+    "curiosity": {
+      "value": 100.0,
+      "change": 75.12309918066495
+    },
+    "strangeness": {
+      "value": 34.33068339125838,
+      "change": 2.445211521852869
+    }
+  },
+  "conditions": [
+    "NORMAL",
+    "FOCUSED",
+    "NOT UNUSUAL"
+  ],
+  "summary": {
+    "change_24h": 2.445211521852869,
+    "avg_7d": 25.63398626492113,
+    "avg_30d": 31.476838825483433
+  },
+  "sensors": {
+    "google_trends": {
+      "status": "ok",
+      "provider": "Google Trends Trending Now RSS",
+      "value": 52.82763840830451,
+      "display_value": "52.8 / 100",
+      "detail": "Huomion keskittyminen 10 trendin liikennearvioista"
+    },
+    "wikipedia": {
+      "status": "unavailable",
+      "value": null,
+      "provider": "knowledge_wikipedia",
+      "detail": "503 Server Error: Service Unavailable for url: https://en.wikipedia.org/w/api.php?action=query&format=json&list=recentchanges&rctype=edit%7Cnew&rcprop=timestamp&rclimit=500&rcstart"
+    },
+    "news": {
+      "status": "ok",
+      "provider": "GDELT 2.0",
+      "value": 828.0,
+      "display_value": "828 uutista/15 min",
+      "detail": "Viimeisimmän GDELT GKG -erän tietuerivit"
+    },
+    "internet_traffic": {
+      "status": "ok",
+      "provider": "Cloudflare Radar API",
+      "value": 104.23965252712237,
+      "display_value": "104.2",
+      "detail": "Radar-suhdeindeksi: sama UTC-tunti edellisinä päivinä = 100"
+    },
+    "conversation": {
+      "status": "ok",
+      "provider": "Hacker News + Mastodon + Bluesky",
+      "value": -0.3465136538617789,
+      "display_value": "3/3 lähdettä",
+      "detail": "Jokainen lähde normalisoidaan omaan historiaansa",
+      "components": {
+        "mastodon": {
+          "status": "ok",
+          "items_per_minute": 4.317343173431734
+        },
+        "hacker_news": {
+          "status": "ok",
+          "items_per_minute": 0.0
+        },
+        "bluesky": {
+          "status": "ok",
+          "items_per_minute": 1338.0
+        }
+      },
+      "component_z": {
+        "mastodon": 0.2859547231773371,
+        "hacker_news": -0.4261623514293405,
+        "bluesky": -0.8993333333333333
+      }
+    }
+  },
+  "sensor_z": {
+    "google_trends": 2.809367371645377,
+    "wikipedia": null,
+    "news": 0.6370277777777777,
+    "internet_traffic": 0.6475276288911805,
+    "conversation": -0.3465136538617789
+  }
+}
