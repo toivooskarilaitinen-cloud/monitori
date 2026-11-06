@@ -1,6 +1,6 @@
 {
-  "date": "2026-11-05",
-  "generated_at": "2026-11-05T19:52:25.702470+00:00",
+  "date": "2026-11-06",
+  "generated_at": "2026-11-06T06:28:38.532805+00:00",
   "method_version": "v0.3",
   "baseline": {
     "observations": 90,
@@ -9,28 +9,28 @@
   },
   "metrics": {
     "activity": {
-      "value": 75.64175680180294,
-      "change": null
+      "value": 64.3962502178824,
+      "change": 15.61478390318883
     },
     "volatility": {
-      "value": null,
-      "change": null
+      "value": 27.922567341984625,
+      "change": 9.339172057440596
     },
     "attention": {
-      "value": 53.67073141013477,
-      "change": null
+      "value": 41.675587049580834,
+      "change": 2.762989811129806
     },
     "tension": {
-      "value": 77.83054465083589,
-      "change": null
+      "value": 63.30023892641534,
+      "change": 21.942860596311277
     },
     "curiosity": {
-      "value": 63.506760988086256,
-      "change": null
+      "value": 49.096392109696076,
+      "change": 6.547146792357353
     },
     "strangeness": {
-      "value": 37.65395284485,
-      "change": null
+      "value": 22.92375547167814,
+      "change": 3.599508902284814
     }
   },
   "conditions": [
@@ -38,43 +38,43 @@
     "NOT UNUSUAL"
   ],
   "summary": {
-    "change_24h": null,
-    "avg_7d": 43.65698935628189,
-    "avg_30d": 34.715455143354355
+    "change_24h": 3.599508902284814,
+    "avg_7d": 46.27551882420427,
+    "avg_30d": 35.32644535253624
   },
   "sensors": {
     "google_trends": {
       "status": "ok",
       "provider": "Google Trends Trending Now RSS",
-      "value": 20.677843879574542,
-      "display_value": "20.7 / 100",
+      "value": 9.81616371834894,
+      "display_value": "9.8 / 100",
       "detail": "Huomion keskittyminen 10 trendin liikennearvioista"
     },
     "wikipedia": {
       "status": "ok",
       "provider": "Wikimedia MediaWiki API",
-      "value": 8619.0,
-      "display_value": "8619 edits/h",
+      "value": 7150.0,
+      "display_value": "7150 edits/h",
       "detail": "English Wikipedia recent changes, last hour"
     },
     "news": {
       "status": "ok",
       "provider": "GDELT 2.0",
-      "value": 1835.0,
-      "display_value": "1 835 uutista/15 min",
+      "value": 937.0,
+      "display_value": "937 uutista/15 min",
       "detail": "Viimeisimmän GDELT GKG -erän tietuerivit"
     },
     "internet_traffic": {
       "status": "ok",
       "provider": "Cloudflare Radar API",
-      "value": 104.20800198834979,
-      "display_value": "104.2",
+      "value": 105.12825560266505,
+      "display_value": "105.1",
       "detail": "Radar-suhdeindeksi: sama UTC-tunti edellisinä päivinä = 100"
     },
     "conversation": {
       "status": "ok",
       "provider": "Hacker News + Mastodon + Bluesky",
-      "value": 3.5938166790499757,
+      "value": 2.7332477135327347,
       "display_value": "3/3 lähdettä",
       "detail": "Jokainen lähde normalisoidaan omaan historiaansa",
       "components": {
@@ -82,27 +82,27 @@
           "status": "ok",
           "items_per_minute": 37.142857142857146
         },
-        "bluesky": {
-          "status": "ok",
-          "items_per_minute": 3048.0
-        },
         "hacker_news": {
           "status": "ok",
           "items_per_minute": 0.0
+        },
+        "bluesky": {
+          "status": "ok",
+          "items_per_minute": 1716.0
         }
       },
       "component_z": {
         "mastodon": 10.188684734861951,
-        "bluesky": 1.0350086206896552,
-        "hacker_news": -0.4422433184016787
+        "hacker_news": -0.4422433184016787,
+        "bluesky": -1.5466982758620689
       }
     }
   },
   "sensor_z": {
-    "google_trends": 0.2039295227852652,
-    "wikipedia": 1.2968216981132077,
-    "news": 1.6567168079096046,
-    "internet_traffic": -0.03314810562215972,
-    "conversation": 3.5938166790499757
+    "google_trends": -0.46246738613439803,
+    "wikipedia": 0.3620665094339623,
+    "news": -0.054073839662447255,
+    "internet_traffic": 0.15792633178072643,
+    "conversation": 2.7332477135327347
   }
 }
